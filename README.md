@@ -1,2 +1,3 @@
 # TrabalhoInformaticaIndustrial
-Trabalho de conclusao de period
+Trabalho de conclusao de periodo
+##Etapas:
