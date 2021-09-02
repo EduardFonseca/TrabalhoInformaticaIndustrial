@@ -20,8 +20,8 @@ Trabalho de conclusao de periodo
 
 # Requisitos:
 * Monitoramento em tempo real das grandezas do processo (20 pontos):
-  * (8 pontos) Comunicação MODBUS com o CLP da planta;
-  * (5 pontos) Tensão da rede, corrente RMS, potência de entrada, velocidade da esteira, rotação do motor, frequência do inversor, temperatura do estator;
+  * (8 pontos) Comunicação MODBUS com o CLP da planta; (CONEXAO REALIZADA)
+  * (5 pontos) Tensão da rede, corrente RMS, potência de entrada, velocidade da esteira, rotação do motor, frequência do inversor, temperatura do estator; (FAZER A LEITURA DOS DADOS)
   * (7 pontos) Gráficos: Cores (RGB) e Peso do objeto.
 
 * Capacidade de atuação no sistema (12 pontos):

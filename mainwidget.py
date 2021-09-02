@@ -20,6 +20,7 @@ class MyWidget(MDScreen):
                 self._modbusClient.port = int(self.ids.port.text)
                 self._modbusClient.open()
                 Snackbar(text = "Conexao realizada com sucesso",bg_color=(0,1,0,1)).open()
+                # print("Tensao: ",self._modbusClient.read_holding_registers(801,1)[0])  #linha para teste de conexao com o servidor
             except Exception as e:
                 print("Erro: ",e.args)
         else:
