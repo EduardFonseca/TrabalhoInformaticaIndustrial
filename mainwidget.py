@@ -1,15 +1,31 @@
 from kivymd.uix.screen import MDScreen
 from pyModbusTCP.client import ModbusClient
-
+from kivymd.uix.snackbar import Snackbar
 class MyWidget(MDScreen):
-    def __inir__(self,**kwargs):
-        super.__init__()
-        #TODO: Verificar como **kwargs funciona em relacao ao **kw
-        self._scan_time = kwargs.get('scan_time')
-        self._serverIP = kwargs.get('server_ip')
-        self._port = kwargs.get('server_port')
+    def __init__(self,**kw):
+        super().__init__(**kw)
+        self._scan_time = 1000
         #TODO: pensar se usaremos coneccao sera feita por pop up(semana 13_14 linhas 22 a 27 mainWidget) ou nao
-        self._modbusClient = ModbusClient(host = self._serverIP, port= self._port)
+        self._modbusClient = ModbusClient()
+        
+
+    def connect(self):
+        """
+        Conexao com Servidor modbus
+        """
+        if self.ids.bt_con.text =='CONECTAR':
+            self.ids.bt_con.text = "DESCONECTAR"
+            try:
+                self._modbusClient.host = self.ids.hostname.text
+                self._modbusClient.port = int(self.ids.port.text)
+                self._modbusClient.open()
+                Snackbar(text = "Conexao realizada com sucesso",bg_color=(0,1,0,1)).open()
+            except Exception as e:
+                print("Erro: ",e.args)
+        else:
+            self.ids.bt_con.text = "CONECTAR"
+            self._modbusClient.close()
+            Snackbar(text="Cliente desconectado",bg_color=(1,0,0,1)).open()
 
     def startDataRead(self,ip,port):
         """
