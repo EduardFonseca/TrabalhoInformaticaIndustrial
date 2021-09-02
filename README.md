@@ -43,7 +43,7 @@ Trabalho de conclusao de periodo
   * (6 pontos) Permitir a busca de dados históricos das informações do processo;
   * (3 pontos) Deverá ser implementado utilizando a técnica ORM com o SQLAlchemy.
 
-#Comandos Git:
+# Comandos Git:
 * Para fazer upload do seu codigo:
   * git add .
   * git commit -m "mensagem do q foi feito"
