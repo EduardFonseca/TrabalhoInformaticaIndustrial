@@ -2,15 +2,27 @@ from kivymd.uix.screen import MDScreen
 from pyModbusTCP.client import ModbusClient
 from kivymd.uix.snackbar import Snackbar
 from threading import Thread, Lock
+from datetime import datetime
+import random
+from time import sleep
 class MyWidget(MDScreen):
 
     _updateThread = None
     _updateWidget = True #TODO: verificar a necissidade de transformar em false principalmente ao desconectar do servidor
+    _tags = {}
+    _max_points = 20
 
-    def __init__(self,**kw):
-        super().__init__(**kw)
+
+    def __init__(self,**kwargs):
+        super().__init__()
         self._scan_time = 1000
+        self._meas={}
+        self._meas['timestamp'] = None
+        self._meas['values'] = {}
         self._lock=Lock()
+        for key,value in kwargs.get('modbus_addr').items():
+            plot_color = (random.random(),random.random(),random.random(),1)
+            self._tags[key] = {'addr': value[0], 'multiplicador':value[1] , 'color':plot_color}
         #TODO: pensar se usaremos coneccao sera feita por pop up(semana 13_14 linhas 22 a 27 mainWidget) ou nao
         self._modbusClient = ModbusClient()
 
@@ -25,7 +37,6 @@ class MyWidget(MDScreen):
                 self._modbusClient.port = int(self.ids.port.text)
                 self._modbusClient.open()
                 self.startDataRead()
-                print("Tensao: ",self._modbusClient.read_holding_registers(801,1)[0])  #linha para teste de conexao com o servidor
             except Exception as e:
                 print("Erro: ",e.args)
         else:
@@ -53,11 +64,14 @@ class MyWidget(MDScreen):
         Invoca leitura de dados, atualizacao da interface e insercao de dados na DB
         """
         try:
-            self.readData()
-            self.updateGUI()
-            self._lock.acquire()
-            # TODO: Fazer o update dos dados na DB com a session
-            self._lock.release()
+            while self._updateWidget:
+                self.readData()
+                self.updateGUI()
+                self._lock.acquire()
+                # TODO: Fazer o update dos dados na DB com a session
+                self._lock.release()
+                
+                sleep(self._scan_time/1000)
 
         except Exception as e:
             print("Erro: ", e.args)
@@ -70,7 +84,10 @@ class MyWidget(MDScreen):
         """
         Metodo para a leitura dos dados por meio do protocolo MODBUS
         """
-        pass
+        self._meas['timestamp'] = datetime.now()
+        for key,value in self._tags.items():
+            self._meas['values'][key] = (self._modbusClient.read_holding_registers(value['addr'],1)[0])/value['multiplicador']
+        print(self._meas)
 
     def updateGUI(self):
         """
