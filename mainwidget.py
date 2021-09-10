@@ -105,5 +105,11 @@ class MyWidget(MDScreen):
         """
         Atualizacao da inteface de usuario
         """
+        for key,value in self._tags.itens():
+            #TODO: Verificar quais dados serao disponibilizados na Gui para poder atualizar eles com if dentro desse for
+            pass
+
+    def getDataDb(self):
         pass
+
 
