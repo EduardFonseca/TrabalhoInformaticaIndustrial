@@ -1,3 +1,4 @@
+from re import S
 from kivymd.uix.screen import MDScreen
 from pyModbusTCP.client import ModbusClient
 from kivymd.uix.snackbar import Snackbar
@@ -5,6 +6,10 @@ from threading import Thread, Lock
 from datetime import datetime
 import random
 from time import sleep
+from db import Session,Base, engine
+from models import DadosIndustria
+
+
 class MyWidget(MDScreen):
 
     _updateThread = None
@@ -25,6 +30,8 @@ class MyWidget(MDScreen):
             self._tags[key] = {'addr': value[0], 'multiplicador':value[1] , 'color':plot_color}
         #TODO: pensar se usaremos coneccao sera feita por pop up(semana 13_14 linhas 22 a 27 mainWidget) ou nao
         self._modbusClient = ModbusClient()
+        self._session = Session()
+        Base.metadata.create_all(engine)
 
 
     def connect(self):
@@ -69,11 +76,16 @@ class MyWidget(MDScreen):
                 self.updateGUI()
                 self._lock.acquire()
                 # TODO: Fazer o update dos dados na DB com a session
+                dado = DadosIndustria(**self._meas['value'])
+                dado.timestamp = self._meas['timestamp']
+                self._session.add(dado)
+                self._session.commit()
                 self._lock.release()
                 
                 sleep(self._scan_time/1000)
 
         except Exception as e:
+            self._modbusClient.close()
             print("Erro: ", e.args)
 
 
