@@ -6,8 +6,8 @@ class DadosIndustria(Base):
     __tablename__ = 'DadosEsteira'
     id = Column(Integer,primary_key = True, autoincrement = True)
     timestamp = Column(DateTime)
-    ferq_des = Column(Integer)
-    ferq_mot = Column(Float)
+    freq_des = Column(Integer)
+    freq_mot = Column(Float)
     tensao = Column(Integer)
     rotacao = Column(Integer)
     pot_entrada = Column(Integer)
@@ -27,8 +27,8 @@ class DadosIndustria(Base):
     def get_attr_printable_list(self):
         return{
             'timestamp': self.timestamp.strftime('%d/%m/%Y %H:%M:%S.%f'),
-            'freq_des': self.ferq_des,
-            'freq_mot': self.ferq_mot,
+            'freq_des': self.freq_des,
+            'freq_mot': self.freq_mot,
             'tensao': self.tensao,
             'rotacao': self.rotacao,
             'pot_entrada': self.pot_entrada,

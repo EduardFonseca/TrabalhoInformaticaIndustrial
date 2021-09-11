@@ -76,7 +76,7 @@ class MyWidget(MDScreen):
                 self.updateGUI()
                 self._lock.acquire()
                 # TODO: Fazer o update dos dados na DB com a session
-                dado = DadosIndustria(**self._meas['value'])
+                dado = DadosIndustria(**self._meas['values'])
                 dado.timestamp = self._meas['timestamp']
                 self._session.add(dado)
                 self._session.commit()
@@ -86,7 +86,7 @@ class MyWidget(MDScreen):
 
         except Exception as e:
             self._modbusClient.close()
-            print("Erro: ", e.args)
+            print("Erro: 1 ", e.args)
 
 
     def stopRefresh(self):
@@ -105,7 +105,7 @@ class MyWidget(MDScreen):
         """
         Atualizacao da inteface de usuario
         """
-        for key,value in self._tags.itens():
+        for key,value in self._tags.items():
             #TODO: Verificar quais dados serao disponibilizados na Gui para poder atualizar eles com if dentro desse for
             pass
 
