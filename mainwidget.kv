@@ -12,8 +12,8 @@
             text_color_active:0.8,0.8,0.8,1
             MDBottomNavigationItem:
                 name: 'config'
-                text: "CONFIGURACOES"
-                icon: 'cog'
+                text: "CONEXAO"
+                icon: 'connection'
                 MDBoxLayout:
                     orientation:"vertical"
                     padding: "20dp"
@@ -24,29 +24,192 @@
                         hint_text: "Endereco de IP"
                         size_hint: (0.2,None)
                         height: "50dp"
-                        pos_hint:{"center_x":0.5,"cente_y":0.5}
+                        pos_hint:{"center_x":0.5,"center_y":0.5}
                     MDTextField:
                         id: port
                         text: "502"
                         hint_text: "Porta do sevidor"
                         size_hint: (0.2,None)
                         height: "50dp"
-                        pos_hint:{"center_x":0.5,"cente_y":0.5}
+                        pos_hint:{"center_x":0.5,"center_y":0.5}
                     MDRoundFlatIconButton:
                         id: bt_con
                         text: "CONECTAR"
                         icon:  'connection'
-                        pos_hint:{"center_x":0.5,"cente_y":0.5}
+                        pos_hint:{"center_x":0.5,"center_y":0.5}
                         on_release: root.connect()
             MDBottomNavigationItem:
                 name: 'Esteira'
                 text: "Esteiras"
                 icon: 'factory'
+                MDBoxLayout:
+                    orientation: 'horizontal'
+                    MDBoxLayout:
+                        orientation: 'vertical'
+                        size_hint:(0.25,1)
+                        padding: "20dp"
+                        # spacing: '50dp'
+                        #TODO: fazer texto do label mudar de acordo com o estado do switch
+
+                        MDLabel:
+                            text:'Ligar/Desligar Processo'
+                            font_size: "15sp"
+                            halign: 'center'
+                            pos_hint: {'center_x': .5, 'center_y': .5}
+                        MDSwitch:
+                            id:on_switch
+                            pos_hint: {'center_x': .5, 'center_y': .5}
+                            active: True
+                        MDLabel:
+                            text:'Ligar/Desligar Entrada de objetos'
+                            halign: 'center'
+                            font_size: "15sp"
+                            pos_hint: {'center_x': .5, 'center_y': .5}
+                        MDSwitch:
+                            id:obj_switch
+                            pos_hint: {'center_x': .5, 'center_y': .5}
+                            active: True
+                        MDLabel:
+                            text: ' '
+                        MDTextField:
+                            id: motor_freq
+                            font_size: "15sp"
+                            hint_text: 'frequencia motor'
+                            halign: 'center'
+                        MDFillRoundFlatButton:
+                            font_size: "15sp"
+                            text: 'Aplicar frequencia'
+                            pos_hint: {'center_x': .5, 'center_y': 1}
+                            on_release: print("novafrequencia")
+                    MDBoxLayout:
+                        orientation: 'vertical'
+                        MDLabel:
+                            text:"teste"
+                            halign:'center'
+                        MDLabel:
+                            text:'grafico \n RGB \n massa'
+                            size_hint: 1,.25
+                            halign:'center'
+                    #imagem entra aqui
             MDBottomNavigationItem:
-                name: 'Grafico'
-                text: "Grafico"
-                icon: 'graph'
+                name: 'ConfiguracaoEsteira'
+                text: "Configuracao esteira"
+                icon: 'cog'
+                MDBoxLayout:
+                    orientation:"vertical"
+                    padding: "20dp"
+                    spacing: '50dp'
+                    MDBoxLayout:
+                        orientation: 'horizontal'
+                        MDCheckbox:
+                            id: filtro_1
+                        MDLabel:
+                            text:'Filtro esteira 1'
+                        MDCheckbox:
+                            id: filtro_r_1
+                        MDLabel:
+                            text:'Filtro vermelho esteira 1'
+                        MDCheckbox:
+                            id: filtro_g_1
+                        MDLabel:
+                            text:'Filtro verde esteira 1'
+                        MDCheckbox:
+                            id: filtro_b_1
+                        MDLabel:
+                            text:'Filtro azul esteira 1'
+                        MDTextField:
+                            id:filtro_massa_1
+                            hint_text: "Massa esteira 1"
+                            pos_hint:{"center_x":0.5,"center_y":0.5}
+                    MDBoxLayout:
+                        orientation: 'horizontal'
+                        MDCheckbox:
+                            id: filtro_2
+                        MDLabel:
+                            text:'Filtro esteira 2'
+                        MDCheckbox:
+                            id: filtro_r_2
+                        MDLabel:
+                            text:'Filtro vermelho esteira 2'
+                        MDCheckbox:
+                            id: filtro_g_2
+                        MDLabel:
+                            text:'Filtro verde esteira 2'
+                        MDCheckbox:
+                            id: filtro_b_2
+                        MDLabel:
+                            text:'Filtro azul esteira 2'
+                        MDTextField:
+                            id:filtro_massa_2
+                            hint_text: "Massa esteira 2"
+                            pos_hint:{"center_x":0.5,"center_y":0.5}
+                    MDBoxLayout:
+                        orientation: 'horizontal'
+                        MDCheckbox:
+                            id: filtro_3
+                        MDLabel:
+                            text:'Filtro esteira 3'
+                        MDCheckbox:
+                            id: filtro_r_3
+                        MDLabel:
+                            text:'Filtro vermelho esteira 3'
+                        MDCheckbox:
+                            id: filtro_g_3
+                        MDLabel:
+                            text:'Filtro verde esteira 3'
+                        MDCheckbox:
+                            id: filtro_b_3
+                        MDLabel:
+                            text:'Filtro azul esteira 3'
+                        MDTextField:
+                            id:filtro_massa_3
+                            hint_text: "Massa esteira 3"
+                            pos_hint:{"center_x":0.5,"center_y":0.5}
+                    MDRoundFlatIconButton:
+                        id:bt_filtro
+                        text:'Configurar'
+                        icon: 'cog'
+                        pos_hint:{"center_x":0.5,"center_y":0.5}
+                        on_release:root.config_filter()
             MDBottomNavigationItem:
                 name: 'DadosHistoricos'
                 text: "Dados Historicos"
                 icon: 'graph'
+                MDBoxLayout:
+                    orientation: 'vertical'
+                    md_bg_color: .6, .6, .6, 1
+                    TimeSeriesGraph:
+                        id: graph
+                        xlabel: 'horario'
+                        ylabel: 'dado'
+                        backgrond_color: 0.5,0.5,0.5,0.5
+                        x_ticks_minor:1
+                        x_ticks_major:5
+                        y_ticks_major:100
+                        y_grid_label: True
+                        x_grid_label: True
+                        padding: 5
+                        x_grid: True
+                        y_grid: True
+                        xmin: 0
+                        ymin: 0
+                        ymax: 500
+                    MDBoxLayout:
+                        id: sensores
+                        orientation:'horizontal'
+                        size_hint:(1,0.1)
+                    MDBoxLayout:
+                        orientation:'horizontal'
+                        size_hint:(1,0.1)
+                        MDLabel:
+                            text:'Timestamp inicial:'
+                            halign: 'center'
+                        MDTextField:
+                            id:txt_init_time
+                            hint_text:'DD/MM/AAAA HH:MM:SS'
+                        MDLabel:
+                            text:'Timestamp final:'
+                            halign: 'center'
+                        MDTextField:
+                            id:txt_final_time
+                            hint_text:'DD/MM/AAAA HH:MM:SS'

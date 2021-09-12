@@ -1,4 +1,4 @@
-from re import S
+from timeseriesgraph import TimeSeriesGraph
 from kivymd.uix.screen import MDScreen
 from pyModbusTCP.client import ModbusClient
 from kivymd.uix.snackbar import Snackbar
@@ -8,6 +8,7 @@ import random
 from time import sleep
 from db import Session,Base, engine
 from models import DadosIndustria
+
 
 
 class MyWidget(MDScreen):
@@ -98,8 +99,11 @@ class MyWidget(MDScreen):
         """
         self._meas['timestamp'] = datetime.now()
         for key,value in self._tags.items():
-            self._meas['values'][key] = (self._modbusClient.read_holding_registers(value['addr'],1)[0])/value['multiplicador']
-        print(self._meas)
+            if key == 'filtro_est_1' or key == 'filtro_est_2' or key == 'filtro_est_3':
+                self._meas['values'][key] = self._modbusClient.read_coils(value['addr'],1)[0]
+            else:
+                self._meas['values'][key] = (self._modbusClient.read_holding_registers(value['addr'],1)[0])/value['multiplicador']
+        # print(self._meas)
 
     def updateGUI(self):
         """
@@ -112,4 +116,5 @@ class MyWidget(MDScreen):
     def getDataDb(self):
         pass
 
-
+    def config_filter(self):
+        print(255*int(self.ids.filtro_1.active))

@@ -1,6 +1,6 @@
 from sqlalchemy.engine import interfaces
 from db import Base
-from sqlalchemy import Column, Integer, DateTime, Float
+from sqlalchemy import Column, Integer, DateTime, Float, Boolean
 
 class DadosIndustria(Base):
     __tablename__ = 'DadosEsteira'
@@ -23,6 +23,22 @@ class DadosIndustria(Base):
     num_obj_est_2 = Column(Integer)
     num_obj_est_3 = Column(Integer)
     num_obj_est_nc = Column(Integer)
+   #Filtros e suas classificacoes
+    filtro_est_1 = Column(Boolean)
+    filtro_est_2 = Column(Boolean)
+    filtro_est_3 = Column(Boolean)
+    filtro_cor_r_1 = Column(Integer)
+    filtro_cor_g_1 = Column(Integer)
+    filtro_cor_b_1 = Column(Integer)
+    filtro_massa_1 = Column(Integer)
+    filtro_cor_r_2 = Column(Integer)
+    filtro_cor_g_2 = Column(Integer)
+    filtro_cor_b_2 = Column(Integer)
+    filtro_massa_2 = Column(Integer)
+    filtro_cor_r_3 = Column(Integer)
+    filtro_cor_g_3 = Column(Integer)
+    filtro_cor_b_3 = Column(Integer)
+    filtro_massa_3 = Column(Integer)
 
     def get_attr_printable_list(self):
         return{
@@ -43,5 +59,23 @@ class DadosIndustria(Base):
             'num_obj_est_1': self.num_obj_est_1,
             'num_obj_est_2': self.num_obj_est_2,
             'num_obj_est_3': self.num_obj_est_3,
-            'num_obj_est_nc': self.num_obj_est_nc
+            'num_obj_est_nc': self.num_obj_est_nc,
+
+            #filtros e classificacoes
+            'filtro_est_1':self.filtro_est_1,
+            'filtro_est_2':self.filtro_est_2,
+            'filtro_est_3':self.filtro_est_3,
+            'filtro_cor_r_1':self.filtro_cor_r_1,
+            'filtro_cor_g_1':self.filtro_cor_b_1,
+            'filtro_cor_b_1':self.filtro_cor_g_1,
+            'filtro_massa_1':self.filtro_massa_1,
+            'filtro_cor_r_2':self.filtro_cor_r_2,
+            'filtro_cor_g_2':self.filtro_cor_b_2,
+            'filtro_cor_b_2':self.filtro_cor_g_2,
+            'filtro_massa_2':self.filtro_massa_2,
+            'filtro_cor_r_3':self.filtro_cor_r_3,
+            'filtro_cor_g_3':self.filtro_cor_b_3,
+            'filtro_cor_b_3':self.filtro_cor_g_3,
+            'filtro_massa_3':self.filtro_massa_3,
             }
+
