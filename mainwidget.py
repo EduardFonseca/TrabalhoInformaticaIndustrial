@@ -49,7 +49,6 @@ class MyWidget(MDScreen):
         self.graph_massa_setup()
         self.grap_RGB_setup()
 
-
     def connect(self):
         """
         Conexao com Servidor modbus
@@ -102,7 +101,6 @@ class MyWidget(MDScreen):
             self._modbusClient.close()
             print("Erro: 1 ", e.args)
 
-
     def stopRefresh(self):
         self._updateWidget=False
 
@@ -116,7 +114,7 @@ class MyWidget(MDScreen):
                 self._meas['values'][key] = self._modbusClient.read_coils(value['addr'],1)[0]
             else:
                 self._meas['values'][key] = (self._modbusClient.read_holding_registers(value['addr'],1)[0])/value['multiplicador']
-        print(self._meas)
+        # print(self._meas)
 
     def updateGUI(self):
         """
@@ -131,12 +129,34 @@ class MyWidget(MDScreen):
         pass
 
     def config_filter(self):
-        print(255*int(self.ids.filtro_1.active))
+        valor_r = 255*int(self.ids.filtro_r_1.active)
+        self._modbusClient.write_single_register(1001,valor_r)
+
+    def config_frequencia(self):
+        value = int(self.ids.motor_freq.text)
+        print(value)
+        self._modbusClient.write_single_register(799,value)
+
+    def on_off(self):
+        if self.ids.on_switch.active:
+            print('ligado')
+            self._modbusClient.write_single_coil(802,0)
+        else:
+            print('desligado')
+            self._modbusClient.write_single_coil(802,1)
+
+    def actuator_state(self):
+        if self.ids.obj_switch.active:
+            print('ligado')
+            self._modbusClient.write_single_coil(801,1)
+        else:
+            print('desligado')
+            self._modbusClient.write_single_coil(801,0)
 
     def graph_massa_setup(self):
         self.plot = LinePlot(line_width = 1.2, color = self._tags['peso_obj']['color'])
         self.ids.mass_graph.add_plot(self.plot)
-    
+
     def grap_RGB_setup(self):
         self.Rplot = LinePlot(line_width = 1.2, color = self._tags['cor_obj_R']['color'])
         self.Gplot = LinePlot(line_width = 1.2, color = self._tags['cor_obj_G']['color'])

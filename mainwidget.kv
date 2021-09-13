@@ -60,6 +60,7 @@
                             id:on_switch
                             pos_hint: {'center_x': .5, 'center_y': .5}
                             active: True
+                            on_active: root.on_off()
                         MDLabel:
                             text:'Ligar/Desligar Entrada de objetos'
                             halign: 'center'
@@ -69,8 +70,7 @@
                             id:obj_switch
                             pos_hint: {'center_x': .5, 'center_y': .5}
                             active: True
-                        MDLabel:
-                            text: ' '
+                            on_active: root.actuator_state()
                         MDTextField:
                             id: motor_freq
                             font_size: "15sp"
@@ -80,7 +80,7 @@
                             font_size: "15sp"
                             text: 'Aplicar frequencia'
                             pos_hint: {'center_x': .5, 'center_y': 1}
-                            on_release: print("novafrequencia")
+                            on_release: root.config_frequencia()
                     MDBoxLayout:
                         orientation: 'vertical'
                         FitImage:

@@ -62,7 +62,8 @@ class TimeSeriesGraph(Graph):
             for i in range(0,min(len(self._x_grid_label),len(labels))):
                 self._x_grid_label[i].text = str(labels[i].strftime("%H:%M:%S"))
         except Exception as e:
-            print('Error: ',e.args)
+           pass
+        #  print('Error: ',e.args)
     
     def setMaxPoints(self, mp, plot_number):
         """
