@@ -1,4 +1,5 @@
 from sqlalchemy.engine import interfaces
+from sqlalchemy.sql.sqltypes import BOOLEAN
 from db import Base
 from sqlalchemy import Column, Integer, DateTime, Float, Boolean
 
@@ -6,6 +7,9 @@ class DadosIndustria(Base):
     __tablename__ = 'DadosEsteira'
     id = Column(Integer,primary_key = True, autoincrement = True)
     timestamp = Column(DateTime)
+    estado_atuador = Column(Boolean)
+    bt_desliga = Column(Boolean)
+    t_part = Column(Integer)
     freq_des = Column(Integer)
     freq_mot = Column(Float)
     tensao = Column(Integer)
@@ -43,6 +47,9 @@ class DadosIndustria(Base):
     def get_attr_printable_list(self):
         return{
             'timestamp': self.timestamp.strftime('%d/%m/%Y %H:%M:%S.%f'),
+            'estado_atuador': self.estado_atuador,
+            'bt_desliga': self.bt_desliga,
+            't_part': self.t_part,
             'freq_des': self.freq_des,
             'freq_mot': self.freq_mot,
             'tensao': self.tensao,

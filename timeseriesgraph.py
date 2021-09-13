@@ -57,7 +57,7 @@ class TimeSeriesGraph(Graph):
         eixo das abscissas de acordo com o vetor de timestamps.
         Este método é invocado por meio do trigger _trigger_time_label
         """
-        try:  
+        try:
             labels = self._timestamps[0:len(self._timestamps):self.x_ticks_major] 
             for i in range(0,min(len(self._x_grid_label),len(labels))):
                 self._x_grid_label[i].text = str(labels[i].strftime("%H:%M:%S"))

@@ -83,14 +83,47 @@
                             on_release: print("novafrequencia")
                     MDBoxLayout:
                         orientation: 'vertical'
-                        MDLabel:
-                            text:"teste"
-                            halign:'center'
-                        MDLabel:
-                            text:'grafico \n RGB \n massa'
-                            size_hint: 1,.25
-                            halign:'center'
-                    #imagem entra aqui
+                        FitImage:
+                            source:'images\Design sem nome.png'
+                            pos_hint: {'center_x': .5, 'center_y': 0.5}
+                        MDBoxLayout:
+                            orientation: 'horizontal'
+                            size_hint:(1,0.25)
+                            md_bg_color: .6, .6, .6, 1
+                            TimeSeriesGraph:
+                                id: mass_graph
+                                xlabel: 't'
+                                ylabel: 'massa'
+                                backgrond_color: 0.5,0.5,0.5,0.5
+                                # x_ticks_minor:1
+                                # x_ticks_major:5
+                                # y_ticks_major:100
+                                y_grid_label: True
+                                x_grid_label: True
+                                padding: 5
+                                x_grid: True
+                                y_grid: True
+                                xmin: 0
+                                ymin: 0
+                                xmax: 100
+                                ymax: 20
+                            TimeSeriesGraph:
+                                id: RGB_graph
+                                xlabel: 't'
+                                ylabel: 'RGB'
+                                backgrond_color: 0.5,0.5,0.5,0.5
+                                # x_ticks_minor:1
+                                # x_ticks_major:5
+                                # y_ticks_major:100
+                                y_grid_label: True
+                                x_grid_label: True
+                                padding: 5
+                                x_grid: True
+                                y_grid: True
+                                xmin: 0
+                                ymin: 0
+                                xmax: 100
+                                ymax: 300
             MDBottomNavigationItem:
                 name: 'ConfiguracaoEsteira'
                 text: "Configuracao esteira"
@@ -119,7 +152,7 @@
                             text:'Filtro azul esteira 1'
                         MDTextField:
                             id:filtro_massa_1
-                            hint_text: "Massa esteira 1"
+                            hint_text: "Massa \nesteira 1"
                             pos_hint:{"center_x":0.5,"center_y":0.5}
                     MDBoxLayout:
                         orientation: 'horizontal'
@@ -141,7 +174,7 @@
                             text:'Filtro azul esteira 2'
                         MDTextField:
                             id:filtro_massa_2
-                            hint_text: "Massa esteira 2"
+                            hint_text: "Massa \nesteira 2"
                             pos_hint:{"center_x":0.5,"center_y":0.5}
                     MDBoxLayout:
                         orientation: 'horizontal'
@@ -163,7 +196,7 @@
                             text:'Filtro azul esteira 3'
                         MDTextField:
                             id:filtro_massa_3
-                            hint_text: "Massa esteira 3"
+                            hint_text: "Massa \nesteira 3"
                             pos_hint:{"center_x":0.5,"center_y":0.5}
                     MDRoundFlatIconButton:
                         id:bt_filtro

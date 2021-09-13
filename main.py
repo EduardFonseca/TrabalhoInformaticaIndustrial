@@ -9,6 +9,9 @@ class MainApp(MDApp):
         self.theme_cls.primary_hue = "500"
         self.theme_cls.accent_palette = "Blue"
         self._addr ={
+            'estado_atuador':[801,1],
+            'bt_desliga':[802,1],
+            't_part':[798,10],
             'freq_des': [799,1], # somente Escrita
             'freq_mot': [800,10],
             'tensao': [801,1],
