@@ -9,6 +9,7 @@ import random
 from time import sleep
 from db import Session,Base, engine
 from models import DadosIndustria
+from kivy.uix.boxlayout import BoxLayout
 
 
 
@@ -48,6 +49,7 @@ class MyWidget(MDScreen):
         Base.metadata.create_all(engine)
         self.graph_massa_setup()
         self.grap_RGB_setup()
+        self.create_histgraph_checkbox()
 
     def connect(self):
         """
@@ -124,34 +126,78 @@ class MyWidget(MDScreen):
         self.ids.RGB_graph.updateGraph((self._meas['timestamp'],self._meas['values']['cor_obj_R']),0)
         self.ids.RGB_graph.updateGraph((self._meas['timestamp'],self._meas['values']['cor_obj_G']),1)
         self.ids.RGB_graph.updateGraph((self._meas['timestamp'],self._meas['values']['cor_obj_B']),2)
+        self.get_printable_info()
 
     def getDataDb(self):
-        pass
+        init_t = self.parseDTString(self.ids.txt_init_time.text)
+        final_t = self.parseDTString(self.ids.txt_final_time.text)
+        cols=[]
+        for sensor in self.ids.sensores.children:
+            if sensor.ids.checkbox.active:
+                cols.append(sensor.id)
+        for sensor in self.ids.sensores2.children:
+            if sensor.ids.checkbox.active:
+                cols.append(sensor.id)
+        for sensor in self.ids.sensores3.children:
+            if sensor.ids.checkbox.active:
+                cols.append(sensor.id)
+        if init_t is None or final_t is None or len(cols)==0:
+            return
+        cols.append('timestamp')
+        self._lock.acquire()
+        dados = self._session.query(DadosIndustria).filter(DadosIndustria.timestamp.between(init_t,final_t))
+        self._lock.release()
+        if dados is None:
+            return
+        self.ids.graph.clearPlots()
+        result = [obj.get_attr_printable_list() for obj in dados]
+        d=0
+        for key,value in result[0].items():
+            aux = []
+            if key in cols:
+                for i in range(len(result)):
+                    if key in cols:
+                        if key == 'timestamp':
+                            continue
+                        p = LinePlot(line_width =1.5, color = self._tags[key]['color'])
+                        aux.append((i,result[i][key]))
+                        p.points = aux
+                        self.ids.graph.add_plot(p)
+            d+=1
+        self.ids.graph.xmax = len(result[d])
+        timestamp = []
+        for j in range(d):
+            timestamp.append(datetime.strptime(result[d]['timestamp'],"%d/%m/%Y %H:%M:%S.%f"))
+        self.ids.graph.update_x_labels(timestamp)
+        # print(dados)
 
     def config_filter(self):
-        valor_r = 255*int(self.ids.filtro_r_1.active)
-        self._modbusClient.write_single_register(1001,valor_r)
+        self._modbusClient.write_single_coil(self._tags['filtro_est_1']['addr'],self.ids.filtro_1.active)
+        self._modbusClient.write_single_coil(self._tags['filtro_est_2']['addr'],self.ids.filtro_2.active)
+        self._modbusClient.write_single_coil(self._tags['filtro_est_3']['addr'],self.ids.filtro_3.active)
+        
+        self._modbusClient.write_single_register(self._tags['filtro_cor_r_1']['addr'],255*self.ids.filtro_r_1.active)
+        self._modbusClient.write_single_register(self._tags['filtro_cor_g_1']['addr'],255*self.ids.filtro_g_1.active)
+        self._modbusClient.write_single_register(self._tags['filtro_cor_b_1']['addr'],255*self.ids.filtro_b_1.active)
+        self._modbusClient.write_single_register(self._tags['filtro_cor_r_2']['addr'],255*self.ids.filtro_r_2.active)
+        self._modbusClient.write_single_register(self._tags['filtro_cor_g_2']['addr'],255*self.ids.filtro_g_2.active)
+        self._modbusClient.write_single_register(self._tags['filtro_cor_b_2']['addr'],255*self.ids.filtro_b_2.active)
+        self._modbusClient.write_single_register(self._tags['filtro_cor_r_3']['addr'],255*self.ids.filtro_r_3.active)
+        self._modbusClient.write_single_register(self._tags['filtro_cor_g_3']['addr'],255*self.ids.filtro_g_3.active)
+        self._modbusClient.write_single_register(self._tags['filtro_cor_b_3']['addr'],255*self.ids.filtro_b_3.active)
+
+        self._modbusClient.write_single_register(self._tags['filtro_massa_1']['addr'],int(self.ids.filtro_massa_1.text))
+        self._modbusClient.write_single_register(self._tags['filtro_massa_2']['addr'],int(self.ids.filtro_massa_2.text))
+        self._modbusClient.write_single_register(self._tags['filtro_massa_3']['addr'],int(self.ids.filtro_massa_3.text))
 
     def config_frequencia(self):
-        value = int(self.ids.motor_freq.text)
-        print(value)
-        self._modbusClient.write_single_register(799,value)
+        self._modbusClient.write_single_register(800,int(self.ids.motor_freq.text))
 
     def on_off(self):
-        if self.ids.on_switch.active:
-            print('ligado')
-            self._modbusClient.write_single_coil(802,0)
-        else:
-            print('desligado')
-            self._modbusClient.write_single_coil(802,1)
+        self._modbusClient.write_single_coil(802,not(self.ids.on_switch.active))
 
     def actuator_state(self):
-        if self.ids.obj_switch.active:
-            print('ligado')
-            self._modbusClient.write_single_coil(801,1)
-        else:
-            print('desligado')
-            self._modbusClient.write_single_coil(801,0)
+        self._modbusClient.write_single_coil(801,self.ids.obj_switch.active)
 
     def graph_massa_setup(self):
         self.plot = LinePlot(line_width = 1.2, color = self._tags['peso_obj']['color'])
@@ -164,3 +210,35 @@ class MyWidget(MDScreen):
         self.ids.RGB_graph.add_plot(self.Rplot)
         self.ids.RGB_graph.add_plot(self.Gplot)
         self.ids.RGB_graph.add_plot(self.Bplot)
+
+    def get_printable_info(self):
+        self.ids.tensao.text = 'Tensao: ' + str(self._meas['values']['tensao'])
+        self.ids.corrente.text = 'Corrente RMS: ' + str(self._meas['values']['corrente'])
+        self.ids.pot_entrada.text = 'Potencia: ' + str(self._meas['values']['pot_entrada'])
+        self.ids.vel_esteira.text = 'Velocidade esteira: ' + str(self._meas['values']['vel_esteira'])
+        self.ids.rotacao.text = 'Rotacao motor: ' + str(self._meas['values']['rotacao'])
+        self.ids.temp_estator.text = 'Temperatura estator: ' + str(self._meas['values']['temp_estator'])
+
+    def create_histgraph_checkbox(self):
+        i=0
+        for key,value in self._tags.items():
+            cb = LabelCheckboxHistGraph()
+            cb.ids.label.text = key
+            cb.ids.label.color = value['color']
+            cb.id = key
+            if i<=12:
+                self.ids.sensores.add_widget(cb)
+            elif i>12 and i<=24:
+                self.ids.sensores2.add_widget(cb)
+            else:
+                self.ids.sensores3.add_widget(cb)
+            i+=1
+
+    def parseDTString(self, datetime_str):
+        try:
+            d = datetime.strptime(datetime_str, '%d/%m/%Y %H:%M:%S')
+            return d
+        except Exception as e:
+            print("Erro: ", e.args)
+class LabelCheckboxHistGraph(BoxLayout):
+    pass

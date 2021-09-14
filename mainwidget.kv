@@ -48,9 +48,6 @@
                         orientation: 'vertical'
                         size_hint:(0.25,1)
                         padding: "20dp"
-                        # spacing: '50dp'
-                        #TODO: fazer texto do label mudar de acordo com o estado do switch
-
                         MDLabel:
                             text:'Ligar/Desligar Processo'
                             font_size: "15sp"
@@ -75,6 +72,7 @@
                             id: motor_freq
                             font_size: "15sp"
                             hint_text: 'frequencia motor'
+                            text:'20'
                             halign: 'center'
                         MDFillRoundFlatButton:
                             font_size: "15sp"
@@ -83,9 +81,40 @@
                             on_release: root.config_frequencia()
                     MDBoxLayout:
                         orientation: 'vertical'
-                        FitImage:
-                            source:'images\Design sem nome.png'
-                            pos_hint: {'center_x': .5, 'center_y': 0.5}
+                        FloatLayout:
+                            FitImage:
+                                source:'images\Design sem nome.png'
+                                pos_hint: {'center_x': .5, 'center_y': 0.5}
+                            Label:
+                                id: tensao
+                                text:'Tensao:'
+                                pos_hint: {'x':-0.4,'y':-0.1}
+                                color: 0,0,0,1
+                            Label:
+                                id: corrente
+                                text:'Corrente RMS: '
+                                pos_hint: {'x':-0.4,'y':-0.2}
+                                color: 0,0,0,1
+                            Label:
+                                id:pot_entrada
+                                text:'Potencia:'
+                                pos_hint: {'x':-0.4,'y':-0.3}
+                                color: 0,0,0,1
+                            Label:
+                                id:vel_esteira
+                                text:'Velocidade esteira:'
+                                pos_hint: {'x':-0,'y':-0.1}
+                                color: 0,0,0,1
+                            Label:
+                                id:rotacao
+                                text:'Rotacao motor:'
+                                pos_hint: {'x':-0,'y':-0.2}
+                                color: 0,0,0,1
+                            Label:
+                                id:temp_estator
+                                text:'Temperatura estator:'
+                                pos_hint: {'x':-0,'y':-0.3}
+                                color: 0,0,0,1
                         MDBoxLayout:
                             orientation: 'horizontal'
                             size_hint:(1,0.25)
@@ -153,6 +182,7 @@
                         MDTextField:
                             id:filtro_massa_1
                             hint_text: "Massa \nesteira 1"
+                            text:'20'
                             pos_hint:{"center_x":0.5,"center_y":0.5}
                     MDBoxLayout:
                         orientation: 'horizontal'
@@ -175,6 +205,7 @@
                         MDTextField:
                             id:filtro_massa_2
                             hint_text: "Massa \nesteira 2"
+                            text:'20'
                             pos_hint:{"center_x":0.5,"center_y":0.5}
                     MDBoxLayout:
                         orientation: 'horizontal'
@@ -197,6 +228,7 @@
                         MDTextField:
                             id:filtro_massa_3
                             hint_text: "Massa \nesteira 3"
+                            text:'20'
                             pos_hint:{"center_x":0.5,"center_y":0.5}
                     MDRoundFlatIconButton:
                         id:bt_filtro
@@ -226,23 +258,47 @@
                         y_grid: True
                         xmin: 0
                         ymin: 0
-                        ymax: 500
+                        ymax: 300
                     MDBoxLayout:
                         id: sensores
                         orientation:'horizontal'
                         size_hint:(1,0.1)
                     MDBoxLayout:
+                        id: sensores2
                         orientation:'horizontal'
                         size_hint:(1,0.1)
+                    MDBoxLayout:
+                        id: sensores3
+                        orientation:'horizontal'
+                        size_hint:(1,0.1)
+                    MDBoxLayout:
+                        orientation:'horizontal'
+                        size_hint:(1,0.15)
                         MDLabel:
+                            font_size: "15sp"
                             text:'Timestamp inicial:'
                             halign: 'center'
                         MDTextField:
+                            font_size: "15sp"
                             id:txt_init_time
                             hint_text:'DD/MM/AAAA HH:MM:SS'
                         MDLabel:
+                            font_size: "15sp"
                             text:'Timestamp final:'
                             halign: 'center'
                         MDTextField:
+                            font_size: "15sp"
                             id:txt_final_time
                             hint_text:'DD/MM/AAAA HH:MM:SS'
+
+
+<LabelCheckboxHistGraph>:
+    orientation: 'vertical'
+    size_hint: (0.05,1)
+    CheckBox:
+        id:checkbox
+        on_active: app.root.getDataDb()
+    Label:
+        id:label
+        font_size: 12 
+        bold: True
