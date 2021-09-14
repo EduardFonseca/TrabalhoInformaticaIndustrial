@@ -116,7 +116,7 @@ class MyWidget(MDScreen):
                 self._meas['values'][key] = self._modbusClient.read_coils(value['addr'],1)[0]
             else:
                 self._meas['values'][key] = (self._modbusClient.read_holding_registers(value['addr'],1)[0])/value['multiplicador']
-        # print(self._meas)
+        # print("frequencia motor: ",self._meas['values']['freq_mot'])
 
     def updateGUI(self):
         """
@@ -191,7 +191,7 @@ class MyWidget(MDScreen):
         self._modbusClient.write_single_register(self._tags['filtro_massa_3']['addr'],int(self.ids.filtro_massa_3.text))
 
     def config_frequencia(self):
-        self._modbusClient.write_single_register(800,int(self.ids.motor_freq.text))
+        self._modbusClient.write_single_register(799,int(self.ids.motor_freq.text))
 
     def on_off(self):
         self._modbusClient.write_single_coil(802,not(self.ids.on_switch.active))
